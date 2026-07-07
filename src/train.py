@@ -8,9 +8,12 @@ Evaluation choices, and why:
   Brier score + calibration because underwriting needs the *probability*
   to be right, not just the ordering — expected loss = PD x exposure.
 
-Run:  python -m src.train
+Run:  python -m src.train                    (full model, served by the API)
+      python -m src.train --variant bureau   (no LC pricing features — grade,
+                                              sub_grade, int_rate, installment)
 """
 
+import argparse
 import json
 
 import lightgbm as lgb
@@ -50,8 +53,16 @@ def temporal_split(df: pd.DataFrame):
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--variant", choices=["full", "bureau"], default="full")
+    args = parser.parse_args()
+    suffix = "" if args.variant == "full" else f"_{args.variant}"
+
     df = pd.read_parquet(config.PROCESSED_PARQUET)
     feat_cols = features.feature_columns()
+    if args.variant == "bureau":
+        feat_cols = [c for c in feat_cols if c not in config.PRICING_COLS]
+        print(f"Bureau variant: excluding {config.PRICING_COLS}")
     train, valid = temporal_split(df)
 
     dtrain = lgb.Dataset(train[feat_cols], label=train[config.TARGET])
@@ -69,6 +80,7 @@ def main() -> None:
     y = valid[config.TARGET].to_numpy()
 
     metrics = {
+        "variant": args.variant,
         "n_train": len(train),
         "n_valid": len(valid),
         "valid_default_rate": float(y.mean()),
@@ -89,10 +101,10 @@ def main() -> None:
     print(calib.to_string(float_format=lambda x: f"{x:.4f}"))
 
     config.MODEL_DIR.mkdir(exist_ok=True)
-    model.save_model(str(config.MODEL_DIR / "pd_model.txt"))
-    (config.MODEL_DIR / "metrics.json").write_text(json.dumps(metrics, indent=2))
-    (config.MODEL_DIR / "feature_columns.json").write_text(json.dumps(feat_cols, indent=2))
-    calib.to_csv(config.MODEL_DIR / "calibration.csv")
+    model.save_model(str(config.MODEL_DIR / f"pd_model{suffix}.txt"))
+    (config.MODEL_DIR / f"metrics{suffix}.json").write_text(json.dumps(metrics, indent=2))
+    (config.MODEL_DIR / f"feature_columns{suffix}.json").write_text(json.dumps(feat_cols, indent=2))
+    calib.to_csv(config.MODEL_DIR / f"calibration{suffix}.csv")
 
     print("\nValidation metrics (out-of-time, 2016+ vintages):")
     for k, v in metrics.items():

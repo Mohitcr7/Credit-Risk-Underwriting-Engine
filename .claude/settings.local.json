@@ -22,7 +22,12 @@
       "Bash(.venv/bin/python -m src.business)",
       "Bash(.venv/bin/python -c \"import pandas; print\\(pandas.__version__\\)\")",
       "Bash(.venv/bin/python -c ' *)",
-      "Bash(.venv/bin/python -m src.explain)"
+      "Bash(.venv/bin/python -m src.explain)",
+      "Bash(.venv/bin/python -m src.calibrate)",
+      "Bash(.venv/bin/python -m src.train --variant bureau)",
+      "Bash(docker info *)",
+      "Bash(git add *)",
+      "Bash(git commit -q -m 'Add isotonic recalibration, bureau-only model variant, Dockerfile *)"
     ]
   }
 }

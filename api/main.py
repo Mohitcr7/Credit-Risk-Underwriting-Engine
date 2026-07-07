@@ -11,6 +11,7 @@ Run:  uvicorn api.main:app --reload
 import json
 from contextlib import asynccontextmanager
 
+import joblib
 import lightgbm as lgb
 import pandas as pd
 from fastapi import FastAPI
@@ -26,6 +27,8 @@ async def lifespan(app: FastAPI):
     state["model"] = lgb.Booster(model_file=str(config.MODEL_DIR / "pd_model.txt"))
     state["policy"] = json.loads((config.MODEL_DIR / "policy.json").read_text())
     state["feat_cols"] = json.loads((config.MODEL_DIR / "feature_columns.json").read_text())
+    calibrator_path = config.MODEL_DIR / "calibrator.pkl"
+    state["calibrator"] = joblib.load(calibrator_path) if calibrator_path.exists() else None
     yield
     state.clear()
 
@@ -94,6 +97,8 @@ def score(applicant: Applicant):
             X[col] = pd.to_numeric(X[col], errors="coerce")
 
     prob = float(state["model"].predict(X)[0])
+    if state["calibrator"] is not None:
+        prob = float(state["calibrator"].predict([prob])[0])
     threshold = state["policy"]["approve_below_pd"]
     reasons = explain.reason_codes(state["model"], X)[0]
 

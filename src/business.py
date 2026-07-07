@@ -48,6 +48,13 @@ def main() -> None:
     feat_cols = features.feature_columns()
     valid["pd"] = model.predict(valid[feat_cols])
 
+    calibrator_path = config.MODEL_DIR / "calibrator.pkl"
+    calibrated = calibrator_path.exists()
+    if calibrated:
+        import joblib
+        valid["pd"] = joblib.load(calibrator_path).predict(valid["pd"])
+        print("Applied isotonic calibrator to PDs.\n")
+
     rows = []
     for threshold in np.arange(0.05, 0.61, 0.025):
         mask = (valid["pd"] < threshold).to_numpy()
@@ -73,6 +80,7 @@ def main() -> None:
         "approve_below_pd": float(best["threshold"]),
         "lgd_assumption": LGD,
         "expected_approval_rate": float(best["approval_rate"]),
+        "pd_is_calibrated": calibrated,
     }, indent=2))
     print(f"\nSaved policy to {config.MODEL_DIR}/policy.json")
 

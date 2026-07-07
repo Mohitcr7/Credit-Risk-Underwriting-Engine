@@ -98,6 +98,13 @@ CATEGORICAL_COLS = [
     "application_type",
 ]
 
+# LendingClub's own pricing outputs. The "bureau" model variant excludes
+# them to answer: how well can we underwrite from raw applicant/bureau
+# attributes alone, without leaning on LC's risk model?
+# (installment is included: it's a function of loan_amnt, term and int_rate,
+# so it leaks the assigned rate.)
+PRICING_COLS = ["grade", "sub_grade", "int_rate", "installment"]
+
 # Engineered in features.py
 ENGINEERED_COLS = ["fico", "credit_history_years"]
 DROPPED_AFTER_ENGINEERING = ["fico_range_low", "fico_range_high", "earliest_cr_line"]
