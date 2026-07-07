@@ -1,0 +1,20 @@
+# Data — too large for git, download via scripts/download_data.sh
+data/raw/
+data/processed/
+
+# Model artifacts
+models/*.pkl
+models/*.txt
+models/*.json
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Secrets
+.env
+
+# OS
+.DS_Store
