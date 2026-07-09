@@ -16,5 +16,8 @@ __pycache__/
 # Secrets
 .env
 
+# Local Claude Code settings (personal, machine-specific)
+.claude/settings.local.json
+
 # OS
 .DS_Store
