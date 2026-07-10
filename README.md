@@ -130,6 +130,29 @@ agent> [re-scores modified applicants to verify] Moving to a 36-month term and
 - **The Dockerfile is build-untested** (no Docker on the dev machine); it follows
   the standard python-slim + libgomp1 pattern for LightGBM.
 
+## Databricks / Lakehouse deployment
+
+[credit_risk_databricks.py](credit_risk_databricks.py) is a single notebook that
+re-architects the whole pipeline onto Databricks (runs top-to-bottom on the free
+**Free Edition** — serverless + Unity Catalog), turning the three things reviewers
+probe into *provable platform facts*:
+
+- **Leakage safety → provable via lineage.** The 28-column origination firewall is
+  a Unity Catalog table built from raw bronze via a whitelist `SELECT`. UC
+  **column lineage** shows no post-origination column (recoveries, total_pymnt,
+  last_fico_*, …) feeds any feature; a programmatic assertion enforces it in-run.
+- **Calibration drift → caught automatically.** The booster + isotonic calibrator +
+  SHAP reason codes are packaged as **one custom MLflow `pyfunc`**, registered to
+  **Unity Catalog**, and served from a **scale-to-zero Model Serving endpoint** with
+  inference logging on. **Lakehouse Monitoring** on the inference log surfaces the
+  vintage-driven calibration drift the isotonic step corrects.
+- **Governance → one MLflow run** holds params, out-of-time ROC-AUC/PR-AUC, and the
+  raw→calibrated **Brier improvement** as compared metrics.
+
+Import it into a Databricks workspace and Run All (set the `catalog`/`schema`
+widgets if your default catalog isn't `workspace`). Serving/Monitoring cells are
+best-effort and degrade gracefully if those features are gated on your workspace.
+
 ## Repo layout
 
 | Path | What it does |
@@ -143,5 +166,6 @@ agent> [re-scores modified applicants to verify] Moving to a 36-month term and
 | [src/explain.py](src/explain.py) | SHAP global importance + per-loan reason codes |
 | [api/main.py](api/main.py) | FastAPI `/score`, `/policy`, `/health` |
 | [agent/explainer_agent.py](agent/explainer_agent.py) | Claude tool-use agent over the scoring API |
+| [credit_risk_databricks.py](credit_risk_databricks.py) | Databricks notebook: Delta + UC lineage firewall + MLflow + pyfunc + UC Model Serving + Lakehouse Monitoring |
 
 Data: [LendingClub accepted loans 2007–2018Q4](https://huggingface.co/datasets/codesignal/lending-club-loan-accepted) (CC0).
