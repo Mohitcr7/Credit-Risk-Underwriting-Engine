@@ -34,9 +34,8 @@ dbutils.library.restartPython()
 
 # MAGIC %md
 # MAGIC ## 1. Configuration
-# MAGIC Everything is parameterized via widgets. Defaults target Free Edition's `workspace` catalog. `sample_fraction=1.0`
-# MAGIC reproduces the resume metrics (0.718 AUC); lower it (e.g. 0.1 ≈ 135K loans) to trade a little accuracy for speed.
-# MAGIC The Delta/UC tables always hold the **full** dataset so lineage stays intact regardless.
+# MAGIC Everything is parameterized via widgets. Defaults target Free Edition's `workspace` catalog. The pipeline
+# MAGIC trains on the **full ~1.35M resolved loans** to reproduce the resume metrics (OOT ROC-AUC ≈ 0.718).
 
 # COMMAND ----------
 
@@ -45,7 +44,6 @@ dbutils.widgets.text("schema", "credit_risk", "Schema")
 dbutils.widgets.text("volume", "raw", "Volume (raw files)")
 dbutils.widgets.text("model_name", "credit_risk_pd", "Registered model name")
 dbutils.widgets.text("endpoint_name", "credit-risk-pd", "Serving endpoint name")
-dbutils.widgets.dropdown("sample_fraction", "1.0", ["0.1", "0.25", "0.5", "1.0"], "Training sample fraction")
 dbutils.widgets.dropdown("deploy_serving", "yes", ["yes", "no"], "Deploy Model Serving endpoint")
 
 CATALOG = dbutils.widgets.get("catalog")
@@ -53,7 +51,6 @@ SCHEMA = dbutils.widgets.get("schema")
 VOLUME = dbutils.widgets.get("volume")
 MODEL_SHORT = dbutils.widgets.get("model_name")
 ENDPOINT = dbutils.widgets.get("endpoint_name")
-SAMPLE_FRACTION = float(dbutils.widgets.get("sample_fraction"))
 DEPLOY_SERVING = dbutils.widgets.get("deploy_serving") == "yes"
 
 SPLIT_DATE = "2016-01-01"       # train < SPLIT_DATE ; validate (out-of-time) >= SPLIT_DATE
@@ -63,7 +60,7 @@ SEED = 42
 
 DATA_URL = "https://huggingface.co/datasets/codesignal/lending-club-loan-accepted/resolve/main/accepted_2007_to_2018Q4.csv"
 
-print(f"Target: {CATALOG}.{SCHEMA}  |  model: {CATALOG}.{SCHEMA}.{MODEL_SHORT}  |  sample_fraction={SAMPLE_FRACTION}")
+print(f"Target: {CATALOG}.{SCHEMA}  |  model: {CATALOG}.{SCHEMA}.{MODEL_SHORT}  |  training on full dataset")
 
 # COMMAND ----------
 
@@ -307,10 +304,7 @@ split = pd.Timestamp(SPLIT_DATE)
 train_mask = pdf["issue_d"] < split
 valid_mask = pdf["issue_d"] >= split
 
-# Optional down-sampling of the TRAINING frame only (tables/lineage remain full).
 train_pdf = pdf[train_mask]
-if SAMPLE_FRACTION < 1.0:
-    train_pdf = train_pdf.sample(frac=SAMPLE_FRACTION, random_state=SEED)
 valid_pdf = pdf[valid_mask]
 
 # Fit integer encoders on TRAIN categories only.
@@ -364,7 +358,7 @@ with mlflow.start_run(run_name="lightgbm_oot_isotonic") as run:
     mlflow.log_params(PARAMS)
     mlflow.log_params({
         "n_train": len(X_train), "n_valid_oot": len(X_valid),
-        "split_date": SPLIT_DATE, "sample_fraction": SAMPLE_FRACTION,
+        "split_date": SPLIT_DATE,
         "n_features": len(FEATURE_COLUMNS),
     })
 
