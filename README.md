@@ -153,6 +153,12 @@ Import it into a Databricks workspace and Run All (set the `catalog`/`schema`
 widgets if your default catalog isn't `workspace`). Serving/Monitoring cells are
 best-effort and degrade gracefully if those features are gated on your workspace.
 
+**On AWS:** the same notebook runs unchanged on a Databricks-on-AWS workspace, where
+Unity Catalog tables are physically **Delta files in S3** and compute is **EC2** — the
+`§5b AWS footprint` cell prints the `s3://` locations as proof. Setup steps (UC
+metastore = S3 bucket + IAM role, serverless, cost hygiene) are in
+[AWS_DATABRICKS_SETUP.md](AWS_DATABRICKS_SETUP.md).
+
 ## Repo layout
 
 | Path | What it does |

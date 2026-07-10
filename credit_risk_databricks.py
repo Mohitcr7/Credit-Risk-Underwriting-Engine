@@ -2,7 +2,9 @@
 # MAGIC %md
 # MAGIC # Credit Risk on Databricks — Leakage-Safe PD Model with Provable Lineage, MLflow, UC Model Serving & Drift Monitoring
 # MAGIC
-# MAGIC A single notebook that runs **top-to-bottom on Databricks Free Edition** (serverless + Unity Catalog).
+# MAGIC A single notebook that runs **top-to-bottom on Databricks Free Edition** *or a **Databricks-on-AWS** workspace*
+# MAGIC (serverless + Unity Catalog). On AWS the Unity Catalog tables are physically **Delta files in S3** and compute
+# MAGIC runs on **EC2** — see the *AWS footprint* cell (§5b) and [AWS_DATABRICKS_SETUP.md](./AWS_DATABRICKS_SETUP.md).
 # MAGIC It reproduces the credit-risk engine from the companion repo, but re-architected onto the Lakehouse so that
 # MAGIC the three things reviewers actually probe become *provable platform facts*, not README claims:
 # MAGIC
@@ -125,9 +127,16 @@ EMP_LENGTH_MAP = {
 # COMMAND ----------
 
 def ensure_namespace(preferred_catalog, schema, volume):
-    candidates = [preferred_catalog, "workspace", "main"]
+    # Free Edition ships a `workspace` catalog; Databricks-on-AWS UC workspaces
+    # usually ship `main`. Try the requested catalog first (creating it when the
+    # metastore has managed S3 storage), then fall back across common defaults.
+    candidates = [preferred_catalog, "main", "workspace"]
     tried = []
     for cat in dict.fromkeys(candidates):  # de-dupe, keep order
+        try:
+            spark.sql(f"CREATE CATALOG IF NOT EXISTS `{cat}`")  # best-effort; needs metastore storage
+        except Exception:  # noqa: BLE001
+            pass
         try:
             spark.sql(f"CREATE SCHEMA IF NOT EXISTS `{cat}`.`{schema}`")
             spark.sql(f"CREATE VOLUME IF NOT EXISTS `{cat}`.`{schema}`.`{volume}`")
@@ -282,6 +291,39 @@ print("Firewall assertion passed — 0 leakage columns in loans_features.")
 print(f"Feature table columns ({len(feature_schema_cols)}): {sorted(feature_schema_cols)}")
 print("\nOpen Catalog Explorer -> loans_features -> Lineage to see the column graph "
       "(recoveries/total_pymnt/last_fico_* have no edge into any feature).")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## 5b. AWS footprint — S3-backed Delta + EC2 compute
+# MAGIC On a Databricks-on-AWS workspace, Unity Catalog tables are physically **Delta files in S3** and notebook
+# MAGIC compute runs on **EC2** in the data plane. This cell prints the concrete `s3://` locations and the compute
+# MAGIC node type so the AWS backing is provable (screenshot-worthy for interviews). On Free Edition these are
+# MAGIC Databricks-managed and abstracted (no `s3://` shown), but everything else in the notebook is identical.
+
+# COMMAND ----------
+
+def _table_location(tbl):
+    try:
+        return spark.sql(f"DESCRIBE DETAIL {tbl}").select("location").first()[0]
+    except Exception as e:  # noqa: BLE001
+        return f"(unavailable: {str(e)[:80]})"
+
+print("Physical storage of Unity Catalog tables:")
+for t in ["loans_raw", "loans_features"]:
+    print(f"  {CATALOG}.{SCHEMA}.{t}\n    -> {_table_location(f'{CATALOG}.{SCHEMA}.{t}')}")
+
+try:
+    vinfo = spark.sql(f"DESCRIBE VOLUME {CATALOG}.{SCHEMA}.{VOLUME}").first().asDict()
+    print(f"  volume '{VOLUME}' -> {vinfo.get('storage_location', vinfo)}")
+except Exception as e:  # noqa: BLE001
+    print(f"  volume location unavailable: {str(e)[:80]}")
+
+node_type = spark.conf.get("spark.databricks.clusterUsageTags.clusterNodeType", None)
+region = spark.conf.get("spark.databricks.clusterUsageTags.region", None)
+print(f"\nCompute node type: {node_type or 'serverless (Databricks-managed EC2)'}"
+      + (f"  |  region: {region}" if region else ""))
+print("An s3:// location above confirms the Lakehouse data is on AWS S3.")
 
 # COMMAND ----------
 
