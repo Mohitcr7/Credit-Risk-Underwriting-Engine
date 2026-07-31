@@ -96,6 +96,10 @@ curl -X POST localhost:8000/score -H 'Content-Type: application/json' -d '{
 # 5. Talk to the decision-explainer agent (requires ANTHROPIC_API_KEY)
 export ANTHROPIC_API_KEY=sk-ant-...
 .venv/bin/python -m agent.explainer_agent
+
+# 6. Text2SQL over the loan book
+.venv/bin/python -m src.text2sql --self-test          # guardrail tests, no API key needed
+.venv/bin/python -m src.text2sql "default rate by grade for 2017 vintages"
 ```
 
 Example agent session:
@@ -111,6 +115,33 @@ you> What would need to change for an approval?
 agent> [re-scores modified applicants to verify] Moving to a 36-month term and
        a smaller amount brings the estimate down to...
 ```
+
+## Text2SQL with read-only guardrails
+
+[src/text2sql.py](src/text2sql.py) turns portfolio questions ("default rate by grade for
+2017 vintages") into SQL over the 1.35M-loan book, exposed to the agent as a
+`query_loan_data` tool and mirrored in the notebook (§11b) against Unity Catalog.
+
+An LLM writing SQL against a governed table is an injection surface, so generated SQL is
+**never executed as-is**. `validate_sql()` enforces: single statement (blocks stacked
+`; DROP TABLE`), `SELECT`/`WITH` only (blocks all DDL/DML), no comment markers (blocks
+`--` smuggling), a table whitelist (blocks `system.information_schema`, arbitrary joins),
+and a mandatory row cap. Rejections are returned to the model as a readable tool error so
+it can rewrite the query rather than guess.
+
+Guardrails are pure functions — unit-testable with no API key and no database:
+
+```bash
+.venv/bin/python -m src.text2sql --self-test
+```
+
+Sample output (`default rate by grade`, from the real loan book):
+
+| grade | n | default_rate | avg_rate |
+|---|---|---|---|
+| A | 235,172 | 6.0% | 7.11% |
+| D | 201,640 | 30.4% | 17.71% |
+| G | 9,326 | 49.7% | 27.54% |
 
 ## Design decisions & honest caveats
 
@@ -171,7 +202,8 @@ metastore = S3 bucket + IAM role, serverless, cost hygiene) are in
 | [src/business.py](src/business.py) | Threshold sweep → profit-optimal approval policy |
 | [src/explain.py](src/explain.py) | SHAP global importance + per-loan reason codes |
 | [api/main.py](api/main.py) | FastAPI `/score`, `/policy`, `/health` |
-| [agent/explainer_agent.py](agent/explainer_agent.py) | Claude tool-use agent over the scoring API |
+| [src/text2sql.py](src/text2sql.py) | Natural language → SQL with read-only guardrails (DuckDB over the loan book) |
+| [agent/explainer_agent.py](agent/explainer_agent.py) | Claude tool-use agent: scoring API + guarded text2sql over the loan book |
 | [credit_risk_databricks.py](credit_risk_databricks.py) | Databricks notebook: Delta + UC lineage firewall + MLflow + pyfunc + UC Model Serving + Lakehouse Monitoring |
 
 Data: [LendingClub accepted loans 2007–2018Q4](https://huggingface.co/datasets/codesignal/lending-club-loan-accepted) (CC0).

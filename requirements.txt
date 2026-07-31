@@ -12,3 +12,4 @@ anthropic>=0.40
 python-dotenv>=1.0
 joblib>=1.4
 httpx>=0.27
+duckdb>=1.0

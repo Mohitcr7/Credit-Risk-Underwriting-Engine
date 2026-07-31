@@ -785,6 +785,88 @@ GROUP BY 1 ORDER BY 1
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC ## 11b. Natural language → SQL over the Unity Catalog loan book (guarded)
+# MAGIC An LLM writing SQL against a governed table is an injection surface, so generated SQL is **never executed
+# MAGIC as-is**. `validate_spark_sql` enforces the same contract as `src/text2sql.py` in the companion repo:
+# MAGIC single statement, `SELECT`/`WITH` only, no comment smuggling, table whitelist, mandatory row cap.
+# MAGIC Rejected queries return an error the model can read and retry against — a text2sql loop that is safe by
+# MAGIC construction rather than by trusting the model.
+
+# COMMAND ----------
+
+import re as _re
+
+_FORBIDDEN = {
+    "drop", "delete", "update", "insert", "alter", "create", "replace", "truncate",
+    "grant", "revoke", "merge", "copy", "refresh", "restore", "vacuum", "set", "use",
+}
+_ALLOWED_TABLES = {"loans_features", "inference_log"}
+_MAX_ROWS = 200
+
+
+class UnsafeSQLError(ValueError):
+    """Generated SQL violated a guardrail and was not executed."""
+
+
+def validate_spark_sql(sql: str) -> str:
+    sql = sql.strip().strip("`").rstrip(";").strip()
+    if not sql:
+        raise UnsafeSQLError("empty query")
+    if "--" in sql or "/*" in sql or "*/" in sql:
+        raise UnsafeSQLError("SQL comments are not allowed")
+    literal_free = _re.sub(r"'[^']*'", "''", sql)
+    if ";" in literal_free:
+        raise UnsafeSQLError("only a single statement is allowed")
+    lowered = literal_free.lower()
+    if not _re.match(r"^\s*(select|with)\b", lowered):
+        raise UnsafeSQLError("query must start with SELECT or WITH")
+    banned = set(_re.findall(r"[a-z_]+", lowered)) & _FORBIDDEN
+    if banned:
+        raise UnsafeSQLError(f"forbidden keyword(s): {', '.join(sorted(banned))}")
+    ctes = set(_re.findall(r"(?:with|,)\s+([a-z_][a-z0-9_]*)\s+as\s*\(", lowered))
+    for ref in set(_re.findall(r"(?:from|join)\s+([a-z_][a-z0-9_\.]*)", lowered)):
+        base = ref.split(".")[-1]
+        if base not in _ALLOWED_TABLES and base not in ctes:
+            raise UnsafeSQLError(f"table '{ref}' is not allowed")
+    if not _re.search(r"\blimit\s+\d+", lowered):
+        sql = f"{sql}\nLIMIT {_MAX_ROWS}"
+    return sql
+
+
+def run_guarded_sql(sql: str):
+    """Validate then execute against Unity Catalog. Returns a Spark DataFrame."""
+    guarded = validate_spark_sql(sql)
+    qualified = guarded.replace("loans_features", f"{CATALOG}.{SCHEMA}.loans_features") \
+                       .replace("inference_log", f"{CATALOG}.{SCHEMA}.inference_log")
+    return spark.sql(qualified)
+
+
+# Guardrail proof: attacks rejected, legitimate analytics allowed.
+for attack in ["DROP TABLE loans_features",
+               "SELECT 1; DELETE FROM loans_features",
+               "SELECT * FROM loans_features -- ; DROP TABLE x",
+               "SELECT * FROM system.information_schema.tables"]:
+    try:
+        run_guarded_sql(attack)
+        print(f"  LEAKED (bug): {attack}")
+    except UnsafeSQLError as e:
+        print(f"  blocked: {attack[:46]:<46} -> {e}")
+
+print("\nLegitimate text2sql answer — 'default rate and average FICO by grade for 2017 vintages':")
+display(run_guarded_sql("""
+    SELECT grade,
+           count(*)                    AS n_loans,
+           round(avg(is_default), 4)   AS default_rate,
+           round(avg(fico), 1)         AS avg_fico
+    FROM loans_features
+    WHERE year(issue_d) = 2017
+    GROUP BY grade
+    ORDER BY grade
+"""))
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC ## 12. What this notebook proves (the resume story)
 # MAGIC
 # MAGIC - **Leakage safety is provable, not asserted.** `loans_features` is derived from `loans_raw` by a whitelist
