@@ -1,0 +1,410 @@
+<svg viewBox="0 0 1320 1024" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Credit Risk Underwriting Engine architecture: raw loan tape to bronze Delta, through a Unity Catalog leakage firewall that blocks post-origination columns, into LightGBM training with out-of-time validation, isotonic calibration, expected-value pricing and SHAP explainability, then MLflow pyfunc packaging, Databricks Model Serving, Lakehouse drift monitoring and a guarded text2sql agent.">
+  <defs>
+    <style>
+      .t-title { font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 24px; font-weight: 800; }
+      .t-sub   { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace; font-size: 10.5px; letter-spacing: 1.6px; }
+      .t-eye   { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace; font-size: 10px; letter-spacing: 2.4px; font-weight: 700; }
+      .t-card  { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace; font-size: 10.5px; letter-spacing: 1.8px; font-weight: 700; }
+      .t-h     { font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 12.5px; font-weight: 650; }
+      .t-hb    { font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 750; }
+      .t-lbl   { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace; font-size: 9px; }
+      .t-mono  { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace; font-size: 10px; }
+      .t-num   { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace; font-size: 19px; font-weight: 700; font-variant-numeric: tabular-nums; }
+      .t-foot  { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace; font-size: 10.5px; letter-spacing: 2.6px; font-weight: 700; }
+      .fg   { fill: #eef2f7; }
+      .mut  { fill: #8b98a9; }
+      .dim  { fill: #5c6a7d; }
+      .gold { fill: #f0b429; }
+      .grn  { fill: #10b981; }
+      .red  { fill: #f0434e; }
+      .stl  { fill: #7fb3d9; }
+      @media (prefers-reduced-motion: reduce) {
+        .motion { display: none; }
+      }
+    </style>
+
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#131a24"/>
+      <stop offset="100%" stop-color="#0f151d"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f0b429"/>
+      <stop offset="100%" stop-color="#f07c4a"/>
+    </linearGradient>
+    <radialGradient id="ambient" cx="44%" cy="16%" r="72%">
+      <stop offset="0%" stop-color="#f0b429" stop-opacity="0.10"/>
+      <stop offset="55%" stop-color="#5b8cb8" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#5b8cb8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="wallGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f0b429" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#f0b429" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="34" height="34" patternUnits="userSpaceOnUse">
+      <path d="M 34 0 L 0 0 0 34" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+
+    <path id="pRawBronze" d="M 224,199 L 244,199"/>
+    <path id="pPass"      d="M 454,214 L 694,214"/>
+    <path id="pBlockHi"   d="M 454,150 C 505,150 560,158 570,182"/>
+    <path id="pBlockLo"   d="M 454,262 C 505,262 560,254 570,236"/>
+    <path id="pFeatDown"  d="M 829,272 C 829,300 176,314 176,358"/>
+    <path id="pStage1"    d="M 327,501 L 345,501"/>
+    <path id="pStage2"    d="M 650,501 L 668,501"/>
+    <path id="pStage3"    d="M 973,501 L 991,501"/>
+    <path id="pServe"     d="M 1144,634 C 1144,654 229,660 229,680"/>
+    <path id="pToObserve" d="M 434,828 L 452,828"/>
+    <path id="pToAgent"   d="M 864,828 L 882,828"/>
+  </defs>
+
+  <rect width="1320" height="1024" fill="#080d14"/>
+  <rect width="1320" height="1024" fill="url(#grid)"/>
+  <rect width="1320" height="1024" fill="url(#ambient)"/>
+
+  <!-- ══════════ masthead ══════════ -->
+  <text class="t-title" x="32" y="48" fill="url(#brand)">Credit Risk Underwriting Engine</text>
+  <text class="t-sub dim" x="33" y="70">1.35M loans · leakage-safe PD model · governed on the lakehouse</text>
+
+  <g class="t-lbl mut">
+    <circle cx="1078" cy="30" r="4" fill="#10b981"/><text x="1090" y="34">passes firewall</text>
+    <circle cx="1078" cy="50" r="4" fill="#f0434e"/><text x="1090" y="54">blocked / drifting</text>
+    <circle cx="1078" cy="70" r="4" fill="#7fb3d9"/><text x="1090" y="74">data flow</text>
+  </g>
+
+  <!-- ══════════ BAND A · DATA PLANE ══════════ -->
+  <text class="t-eye gold" x="32" y="112">DATA PLANE · DELTA + UNITY CATALOG</text>
+
+  <!-- raw loan tape -->
+  <rect x="24" y="126" width="200" height="146" rx="13" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.08"/>
+  <text class="t-card mut" x="42" y="152">RAW LOAN TAPE</text>
+  <line x1="42" y1="164" x2="206" y2="164" stroke="#ffffff" stroke-opacity="0.08"/>
+  <text class="t-num fg" x="42" y="196">2.26M</text>
+  <text class="t-lbl dim" x="42" y="214">accepted loans · 151 columns</text>
+  <text class="t-mono stl" x="42" y="240">LendingClub 2007–2018</text>
+  <text class="t-lbl dim" x="42" y="256">CC0 · landed in a UC Volume</text>
+
+  <!-- bronze -->
+  <rect x="244" y="126" width="210" height="146" rx="13" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.08"/>
+  <text class="t-card mut" x="262" y="152">BRONZE · loans_raw</text>
+  <line x1="262" y1="164" x2="436" y2="164" stroke="#ffffff" stroke-opacity="0.08"/>
+  <text class="t-h fg" x="262" y="188">Delta · full 151-col schema</text>
+  <text class="t-lbl dim" x="262" y="206">every leakage column is kept here</text>
+  <text class="t-lbl dim" x="262" y="220">on purpose — exclusion must be</text>
+  <text class="t-lbl dim" x="262" y="234">visible, not merely claimed</text>
+  <rect x="262" y="244" width="174" height="20" rx="6" fill="#7fb3d9" fill-opacity="0.07" stroke="#7fb3d9" stroke-opacity="0.30"/>
+  <text class="t-lbl stl" x="272" y="258">resolved loans only → 1.35M</text>
+
+  <use href="#pRawBronze" stroke="#7fb3d9" stroke-width="1.3" stroke-opacity="0.35" stroke-dasharray="3 4" fill="none"/>
+
+  <!-- ── firewall corridor (454 … 694), barrier at 574 ── -->
+  <g class="motion">
+    <circle cx="574" cy="199" r="56" fill="url(#wallGlow)">
+      <animate attributeName="r" values="44;62;44" dur="3.8s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  <line x1="574" y1="116" x2="574" y2="286" stroke="#f0b429" stroke-width="7" stroke-opacity="0.15"/>
+  <line x1="574" y1="116" x2="574" y2="286" stroke="#f0b429" stroke-width="2.4" stroke-opacity="0.9"/>
+  <g stroke="#f0b429" stroke-opacity="0.5" stroke-width="1">
+    <line x1="567" y1="120" x2="581" y2="120"/>
+    <line x1="567" y1="282" x2="581" y2="282"/>
+  </g>
+  <text class="t-card gold" x="574" y="108" text-anchor="middle">FIREWALL</text>
+
+  <!-- blocked lanes -->
+  <g stroke="#f0434e" stroke-width="1.3" stroke-opacity="0.32" stroke-dasharray="3 4" fill="none">
+    <use href="#pBlockHi"/><use href="#pBlockLo"/>
+  </g>
+  <g class="motion" fill="#f0434e">
+    <circle r="3.2">
+      <animateMotion dur="2.6s" repeatCount="indefinite" begin="0s"><mpath href="#pBlockHi"/></animateMotion>
+      <animate attributeName="opacity" values="0;1;1;1;0" keyTimes="0;0.12;0.72;0.86;1" dur="2.6s" begin="0s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="3.2;3.2;5.4;0" keyTimes="0;0.72;0.86;1" dur="2.6s" begin="0s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="3.2">
+      <animateMotion dur="2.6s" repeatCount="indefinite" begin="1.3s"><mpath href="#pBlockLo"/></animateMotion>
+      <animate attributeName="opacity" values="0;1;1;1;0" keyTimes="0;0.12;0.72;0.86;1" dur="2.6s" begin="1.3s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="3.2;3.2;5.4;0" keyTimes="0;0.72;0.86;1" dur="2.6s" begin="1.3s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  <!-- pass lane -->
+  <use href="#pPass" stroke="#10b981" stroke-width="1.4" stroke-opacity="0.45" stroke-dasharray="3 4" fill="none"/>
+  <polygon points="686,210 696,214 686,218" fill="#10b981" opacity="0.85"/>
+  <text class="t-lbl grn" x="584" y="206">28 origination cols</text>
+  <g class="motion" fill="#10b981">
+    <circle r="3.4"><animateMotion dur="2.4s" repeatCount="indefinite" begin="0s"><mpath href="#pPass"/></animateMotion></circle>
+    <circle r="3.4"><animateMotion dur="2.4s" repeatCount="indefinite" begin="0.8s"><mpath href="#pPass"/></animateMotion></circle>
+    <circle r="3.4"><animateMotion dur="2.4s" repeatCount="indefinite" begin="1.6s"><mpath href="#pPass"/></animateMotion></circle>
+  </g>
+  <text class="t-lbl red" x="574" y="296" text-anchor="middle">blocked · recoveries · total_pymnt · last_fico_range_* · settlement · hardship</text>
+  <text class="t-lbl dim" x="574" y="310" text-anchor="middle">a single whitelist CREATE TABLE AS SELECT — no post-origination column reaches a feature</text>
+
+  <!-- feature table -->
+  <rect x="694" y="126" width="270" height="146" rx="13" fill="url(#panel)" stroke="#10b981" stroke-opacity="0.35"/>
+  <text class="t-card grn" x="712" y="152">UC · loans_features</text>
+  <line x1="712" y1="164" x2="946" y2="164" stroke="#ffffff" stroke-opacity="0.08"/>
+  <text class="t-h fg" x="712" y="188">27 features · 0 leakage</text>
+  <text class="t-lbl dim" x="712" y="206">column lineage proves no post-origination</text>
+  <text class="t-lbl dim" x="712" y="220">field reaches a feature — and the run</text>
+  <text class="t-lbl dim" x="712" y="234">asserts it, so a breach fails the build</text>
+  <rect x="712" y="244" width="234" height="20" rx="6" fill="#10b981" fill-opacity="0.09" stroke="#10b981" stroke-opacity="0.38"/>
+  <text class="t-lbl grn" x="722" y="258">honest 0.718 AUC · not a 0.95+ leak</text>
+
+  <!-- physical footprint -->
+  <rect x="984" y="126" width="312" height="146" rx="13" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.08"/>
+  <text class="t-card mut" x="1002" y="152">PHYSICAL FOOTPRINT</text>
+  <line x1="1002" y1="164" x2="1278" y2="164" stroke="#ffffff" stroke-opacity="0.08"/>
+  <rect x="1002" y="176" width="130" height="30" rx="8" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.10"/>
+  <text class="t-mono fg" x="1018" y="195">S3 · Delta files</text>
+  <rect x="1146" y="176" width="132" height="30" rx="8" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.10"/>
+  <text class="t-mono fg" x="1162" y="195">EC2 · compute</text>
+  <text class="t-lbl dim" x="1002" y="228">Databricks on AWS — Unity Catalog tables are</text>
+  <text class="t-lbl dim" x="1002" y="242">Delta files in S3, notebooks run on EC2</text>
+  <text class="t-lbl dim" x="1002" y="260">the same notebook runs on Free Edition</text>
+
+  <!-- band A → band B -->
+  <use href="#pFeatDown" stroke="#7fb3d9" stroke-width="1.3" stroke-opacity="0.32" stroke-dasharray="3 4" fill="none"/>
+  <polygon points="171,352 181,352 176,360" fill="#7fb3d9" opacity="0.65"/>
+  <g class="motion" fill="#7fb3d9">
+    <circle r="3.2"><animateMotion dur="2.8s" repeatCount="indefinite" begin="0s"><mpath href="#pFeatDown"/></animateMotion></circle>
+    <circle r="3.2"><animateMotion dur="2.8s" repeatCount="indefinite" begin="1.4s"><mpath href="#pFeatDown"/></animateMotion></circle>
+  </g>
+
+  <!-- ══════════ BAND B · MODEL PLANE ══════════ -->
+  <text class="t-eye gold" x="32" y="344">MODEL PLANE · TRAIN → CALIBRATE → PRICE → EXPLAIN</text>
+
+  <g stroke="#7fb3d9" stroke-width="1.3" stroke-opacity="0.36" stroke-dasharray="3 4" fill="none">
+    <use href="#pStage1"/><use href="#pStage2"/><use href="#pStage3"/>
+  </g>
+  <g fill="#7fb3d9" opacity="0.75">
+    <polygon points="339,497 347,501 339,505"/>
+    <polygon points="662,497 670,501 662,505"/>
+    <polygon points="985,497 993,501 985,505"/>
+  </g>
+  <g class="motion" fill="#7fb3d9">
+    <circle r="3"><animateMotion dur="1.7s" repeatCount="indefinite" begin="0s"><mpath href="#pStage1"/></animateMotion></circle>
+    <circle r="3"><animateMotion dur="1.7s" repeatCount="indefinite" begin="0.4s"><mpath href="#pStage2"/></animateMotion></circle>
+    <circle r="3"><animateMotion dur="1.7s" repeatCount="indefinite" begin="0.8s"><mpath href="#pStage3"/></animateMotion></circle>
+  </g>
+
+  <!-- 01 TRAIN -->
+  <g transform="translate(24, 358)">
+    <rect width="303" height="276" rx="13" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-card gold" x="20" y="30">01 · TRAIN</text>
+    <line x1="20" y1="42" x2="283" y2="42" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-hb fg" x="20" y="68">LightGBM · out-of-time</text>
+    <text class="t-lbl dim" x="20" y="86">random K-fold flatters a credit model —</text>
+    <text class="t-lbl dim" x="20" y="100">it will be deployed on future vintages</text>
+
+    <rect x="20" y="114" width="168" height="26" rx="6" fill="#7fb3d9" fill-opacity="0.14" stroke="#7fb3d9" stroke-opacity="0.38"/>
+    <text class="t-lbl stl" x="30" y="131">train · &lt; 2016 · 829K</text>
+    <rect x="194" y="114" width="89" height="26" rx="6" fill="#f0b429" fill-opacity="0.15" stroke="#f0b429" stroke-opacity="0.45"/>
+    <text class="t-lbl gold" x="204" y="131">OOT · 519K</text>
+
+    <text class="t-num grn" x="20" y="184">0.718</text>
+    <text class="t-lbl dim" x="100" y="184">ROC-AUC</text>
+    <text class="t-num fg" x="20" y="218">0.411</text>
+    <text class="t-lbl dim" x="100" y="212">PR-AUC</text>
+    <text class="t-lbl dim" x="100" y="224">22.4% default base rate</text>
+
+    <rect x="20" y="234" width="263" height="26" rx="8" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.09"/>
+    <text class="t-lbl mut" x="32" y="251">one MLflow run · params, metrics, artifacts</text>
+  </g>
+
+  <!-- 02 CALIBRATE -->
+  <g transform="translate(347, 358)">
+    <rect width="303" height="276" rx="13" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-card gold" x="20" y="30">02 · CALIBRATE</text>
+    <line x1="20" y1="42" x2="283" y2="42" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-hb fg" x="20" y="68">Isotonic · vintage drift</text>
+    <text class="t-lbl dim" x="20" y="86">fit on 2016, judged on 2017+ — monotonic,</text>
+    <text class="t-lbl dim" x="20" y="100">so the ranking is left untouched</text>
+
+    <rect x="20" y="112" width="263" height="92" rx="8" fill="#080d14" fill-opacity="0.55" stroke="#ffffff" stroke-opacity="0.06"/>
+    <polyline points="38,134 90,138 142,135 194,140 264,136" fill="none" stroke="#f0434e" stroke-width="2" stroke-opacity="0.9"/>
+    <text class="t-lbl red" x="38" y="128">realized default rate</text>
+
+    <polyline points="38,146 90,150 142,147 194,152 264,148" fill="none" stroke="#10b981" stroke-width="2" stroke-opacity="0.95"/>
+    <text class="t-lbl grn" x="180" y="164">calibrated</text>
+
+    <polyline points="38,184 90,188 142,185 194,190 264,186" fill="none" stroke="#7fb3d9" stroke-width="1.8" stroke-dasharray="4 3" stroke-opacity="0.75"/>
+    <text class="t-lbl stl" x="38" y="199">raw predicted PD</text>
+
+    <g class="motion">
+      <polyline points="38,184 90,188 142,185 194,190 264,186" fill="none" stroke="#7fb3d9" stroke-width="2">
+        <animate attributeName="points"
+                 values="38,184 90,188 142,185 194,190 264,186;
+                         38,184 90,188 142,185 194,190 264,186;
+                         38,146 90,150 142,147 194,152 264,148;
+                         38,146 90,150 142,147 194,152 264,148"
+                 keyTimes="0;0.28;0.62;1" dur="5.8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.9;0.9;0.9;0" keyTimes="0;0.28;0.66;1" dur="5.8s" repeatCount="indefinite"/>
+      </polyline>
+    </g>
+
+    <text class="t-h fg" x="20" y="230">decile gap  ~25%  →  1–2%</text>
+    <text class="t-mono grn" x="20" y="252">Brier 0.1533 → 0.1520</text>
+    <text class="t-lbl dim" x="20" y="266">no ranking loss — AUC unchanged</text>
+  </g>
+
+  <!-- 03 PRICE -->
+  <g transform="translate(670, 358)">
+    <rect width="303" height="276" rx="13" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-card gold" x="20" y="30">03 · PRICE</text>
+    <line x1="20" y1="42" x2="283" y2="42" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-hb fg" x="20" y="68">Expected-value sweep</text>
+    <text class="t-lbl dim" x="20" y="86">a probability is not a decision — the cutoff</text>
+    <text class="t-lbl dim" x="20" y="100">is set by economics, not by F1</text>
+
+    <rect x="20" y="112" width="263" height="26" rx="7" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.09"/>
+    <text class="t-lbl mut" x="32" y="129">term interest earned   vs   65% LGD loss</text>
+
+    <rect x="20" y="148" width="263" height="76" rx="8" fill="#080d14" fill-opacity="0.55" stroke="#ffffff" stroke-opacity="0.06"/>
+    <polyline points="36,214 72,196 108,180 144,169 180,164 214,162 250,163 268,164" fill="none" stroke="#f0b429" stroke-width="2"/>
+    <line x1="214" y1="156" x2="214" y2="218" stroke="#10b981" stroke-width="1.2" stroke-dasharray="3 3" stroke-opacity="0.85"/>
+    <circle cx="214" cy="162" r="4.5" fill="#10b981"/>
+    <text class="t-lbl dim" x="36" y="234">approve fewer</text>
+    <text class="t-lbl dim" x="268" y="234" text-anchor="end">approve more</text>
+
+    <text class="t-num grn" x="20" y="262">PD &lt; 0.475</text>
+    <text class="t-lbl dim" x="140" y="256">profit-optimal cutoff</text>
+    <text class="t-lbl dim" x="140" y="268">93% approval on the book</text>
+  </g>
+
+  <!-- 04 EXPLAIN -->
+  <g transform="translate(993, 358)">
+    <rect width="303" height="276" rx="13" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-card gold" x="20" y="30">04 · EXPLAIN</text>
+    <line x1="20" y1="42" x2="283" y2="42" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-hb fg" x="20" y="68">SHAP · adverse action</text>
+    <text class="t-lbl dim" x="20" y="86">ECOA obliges a lender to say why — so a</text>
+    <text class="t-lbl dim" x="20" y="100">reason code ships with every score</text>
+
+    <line x1="150" y1="112" x2="150" y2="206" stroke="#ffffff" stroke-opacity="0.14"/>
+    <g>
+      <text class="t-lbl mut" x="20" y="130">sub_grade G4</text>
+      <rect x="152" y="120" width="116" height="11" rx="3" fill="#f0434e" fill-opacity="0.8"/>
+      <text class="t-lbl mut" x="20" y="154">term 60 months</text>
+      <rect x="152" y="144" width="84" height="11" rx="3" fill="#f0434e" fill-opacity="0.62"/>
+      <text class="t-lbl mut" x="20" y="178">revol_util 95%</text>
+      <rect x="152" y="168" width="60" height="11" rx="3" fill="#f0434e" fill-opacity="0.46"/>
+      <text class="t-lbl mut" x="20" y="202">fico 745</text>
+      <rect x="104" y="192" width="44" height="11" rx="3" fill="#10b981" fill-opacity="0.7"/>
+    </g>
+    <text class="t-lbl dim" x="150" y="222" text-anchor="middle">← lowers risk      raises risk →</text>
+
+    <rect x="20" y="234" width="263" height="26" rx="8" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.09"/>
+    <text class="t-lbl mut" x="32" y="251">global importance + per-applicant reasons</text>
+  </g>
+
+  <!-- band B → band C -->
+  <use href="#pServe" stroke="#7fb3d9" stroke-width="1.3" stroke-opacity="0.32" stroke-dasharray="3 4" fill="none"/>
+  <polygon points="224,674 234,674 229,682" fill="#7fb3d9" opacity="0.65"/>
+  <g class="motion" fill="#7fb3d9">
+    <circle r="3.2"><animateMotion dur="3s" repeatCount="indefinite" begin="0s"><mpath href="#pServe"/></animateMotion></circle>
+    <circle r="3.2"><animateMotion dur="3s" repeatCount="indefinite" begin="1.5s"><mpath href="#pServe"/></animateMotion></circle>
+  </g>
+
+  <!-- ══════════ BAND C · SERVE · OBSERVE · ASK ══════════ -->
+  <text class="t-eye gold" x="32" y="666">SERVE · OBSERVE · ASK</text>
+
+  <g stroke="#7fb3d9" stroke-width="1.3" stroke-opacity="0.36" stroke-dasharray="3 4" fill="none">
+    <use href="#pToObserve"/><use href="#pToAgent"/>
+  </g>
+  <g fill="#7fb3d9" opacity="0.75">
+    <polygon points="446,824 454,828 446,832"/>
+    <polygon points="876,824 884,828 876,832"/>
+  </g>
+  <g class="motion" fill="#7fb3d9">
+    <circle r="3"><animateMotion dur="1.9s" repeatCount="indefinite" begin="0s"><mpath href="#pToObserve"/></animateMotion></circle>
+    <circle r="3"><animateMotion dur="1.9s" repeatCount="indefinite" begin="0.95s"><mpath href="#pToAgent"/></animateMotion></circle>
+  </g>
+
+  <!-- PACKAGE & SERVE -->
+  <g transform="translate(24, 680)">
+    <rect width="410" height="290" rx="13" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-card mut" x="20" y="30">PACKAGE &amp; SERVE</text>
+    <line x1="20" y1="42" x2="390" y2="42" stroke="#ffffff" stroke-opacity="0.08"/>
+
+    <rect x="20" y="56" width="370" height="60" rx="9" fill="#f0b429" fill-opacity="0.07" stroke="#f0b429" stroke-opacity="0.38"/>
+    <text class="t-h gold" x="34" y="78">one MLflow pyfunc</text>
+    <text class="t-lbl mut" x="34" y="95">booster + isotonic calibrator + SHAP reasons —</text>
+    <text class="t-lbl mut" x="34" y="108">signed, pinned and versioned as one artifact</text>
+
+    <text class="t-lbl dim" x="20" y="138">registered to</text>
+    <rect x="20" y="146" width="370" height="28" rx="8" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.10"/>
+    <text class="t-mono fg" x="34" y="164">Unity Catalog Model Registry · @champion</text>
+
+    <text class="t-lbl dim" x="20" y="198">served two ways</text>
+    <rect x="20" y="206" width="180" height="64" rx="9" fill="#ffffff" fill-opacity="0.03" stroke="#10b981" stroke-opacity="0.30"/>
+    <text class="t-h fg" x="34" y="228">Model Serving</text>
+    <text class="t-lbl dim" x="34" y="245">scale-to-zero endpoint</text>
+    <text class="t-lbl grn" x="34" y="260">inference logging on</text>
+
+    <rect x="210" y="206" width="180" height="64" rx="9" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.10"/>
+    <text class="t-h fg" x="224" y="228">FastAPI · Docker</text>
+    <text class="t-lbl dim" x="224" y="245">/score · /policy</text>
+    <text class="t-lbl dim" x="224" y="260">PD + decision + reasons</text>
+  </g>
+
+  <!-- OBSERVE -->
+  <g transform="translate(454, 680)">
+    <rect width="410" height="290" rx="13" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-card mut" x="20" y="30">OBSERVE</text>
+    <line x1="20" y1="42" x2="390" y2="42" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-hb fg" x="20" y="68">Lakehouse Monitoring</text>
+    <text class="t-lbl dim" x="20" y="86">the inference log is the substrate — predicted PD</text>
+    <text class="t-lbl dim" x="20" y="100">against realized default, profiled by vintage</text>
+
+    <rect x="20" y="112" width="370" height="112" rx="8" fill="#080d14" fill-opacity="0.55" stroke="#ffffff" stroke-opacity="0.06"/>
+    <line x1="34" y1="200" x2="376" y2="200" stroke="#ffffff" stroke-opacity="0.10"/>
+    <g>
+      <rect x="46"  y="182" width="24" height="18" rx="3" fill="#7fb3d9" fill-opacity="0.5"/>
+      <rect x="88"  y="174" width="24" height="26" rx="3" fill="#7fb3d9" fill-opacity="0.5"/>
+      <rect x="130" y="168" width="24" height="32" rx="3" fill="#7fb3d9" fill-opacity="0.5"/>
+      <rect x="172" y="156" width="24" height="44" rx="3" fill="#f0b429" fill-opacity="0.6"/>
+      <rect x="214" y="148" width="24" height="52" rx="3" fill="#f0b429" fill-opacity="0.72"/>
+      <rect x="256" y="140" width="24" height="60" rx="3" fill="#f0434e" fill-opacity="0.78"/>
+      <rect x="298" y="132" width="24" height="68" rx="3" fill="#f0434e" fill-opacity="0.88"/>
+      <rect x="340" y="144" width="24" height="56" rx="3" fill="#f0434e" fill-opacity="0.72"/>
+    </g>
+    <text class="t-lbl dim" x="34" y="130">predicted-vs-actual gap</text>
+    <text class="t-lbl red" x="376" y="130" text-anchor="end">drift detected</text>
+    <text class="t-lbl dim" x="34" y="216">by vintage quarter →</text>
+
+    <rect x="20" y="236" width="370" height="42" rx="9" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.09"/>
+    <text class="t-lbl mut" x="34" y="254">newer vintages default above forecast — the very</text>
+    <text class="t-lbl mut" x="34" y="269">drift stage 02 corrects, now caught on its own</text>
+  </g>
+
+  <!-- ASK -->
+  <g transform="translate(884, 680)">
+    <rect width="412" height="290" rx="13" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-card mut" x="20" y="30">ASK</text>
+    <line x1="20" y1="42" x2="392" y2="42" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-hb fg" x="20" y="68">Claude agent · tool use</text>
+    <text class="t-lbl dim" x="20" y="86">every figure it states comes from a tool call —</text>
+    <text class="t-lbl dim" x="20" y="100">it is never permitted to estimate a PD itself</text>
+
+    <rect x="20" y="112" width="372" height="26" rx="7" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.10"/>
+    <circle cx="34" cy="125" r="3.5" fill="#7fb3d9"/>
+    <text class="t-mono fg" x="48" y="129">score_applicant</text>
+    <text class="t-lbl dim" x="380" y="129" text-anchor="end">PD · decision · reasons</text>
+
+    <rect x="20" y="144" width="372" height="26" rx="7" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.10"/>
+    <circle cx="34" cy="157" r="3.5" fill="#7fb3d9"/>
+    <text class="t-mono fg" x="48" y="161">get_policy</text>
+    <text class="t-lbl dim" x="380" y="161" text-anchor="end">threshold · LGD</text>
+
+    <rect x="20" y="176" width="372" height="26" rx="7" fill="#10b981" fill-opacity="0.07" stroke="#10b981" stroke-opacity="0.35"/>
+    <circle cx="34" cy="189" r="3.5" fill="#10b981"/>
+    <text class="t-mono fg" x="48" y="193">query_loan_data</text>
+    <text class="t-lbl grn" x="380" y="193" text-anchor="end">text2sql · 1.35M rows</text>
+
+    <rect x="20" y="214" width="372" height="64" rx="9" fill="#f0434e" fill-opacity="0.05" stroke="#f0434e" stroke-opacity="0.30"/>
+    <text class="t-h red" x="34" y="236">SQL guardrails</text>
+    <text class="t-lbl mut" x="34" y="254">single statement · SELECT only · table whitelist</text>
+    <text class="t-lbl mut" x="34" y="269">row cap · 11/11 injection + DDL attacks blocked</text>
+  </g>
+
+  <text class="t-foot dim" x="660" y="1002" text-anchor="middle">PROVE THE FIREWALL · JUDGE ON FUTURE VINTAGES · PRICE THE DECISION · EXPLAIN EVERY DECLINE</text>
+</svg>

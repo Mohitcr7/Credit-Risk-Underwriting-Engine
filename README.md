@@ -1,20 +1,11 @@
+![Credit Risk Underwriting Engine — architecture: raw loan tape into bronze Delta, through a Unity Catalog leakage firewall that blocks post-origination columns, into LightGBM training with out-of-time validation, isotonic calibration, expected-value pricing and SHAP explainability, then MLflow pyfunc packaging, Databricks Model Serving, Lakehouse drift monitoring and a guarded text2sql agent.](docs/architecture.svg)
+
 # Credit Risk Engine — PD Model, Profit-Optimal Policy & AI Decision Explainer
 
 An end-to-end consumer credit underwriting system built on 1.35M real LendingClub
 loans (2007–2018): a leakage-safe probability-of-default model, a profit-driven
 approval policy, regulatory-style reason codes, a FastAPI scoring service, and a
 Claude-powered agent that explains individual credit decisions in plain language.
-
-```
-raw CSV (2.26M loans, 151 cols)
-   └─ data_prep      leakage firewall + labeling        → 1.35M resolved loans
-       └─ train      LightGBM, out-of-time validation   → PD model (AUC 0.718)
-           ├─ calibrate  isotonic on 2016 vintage       → drift-corrected PDs
-           ├─ business   profit-sweep over thresholds   → approval policy
-           ├─ explain    SHAP global + per-loan reasons → reason codes
-           └─ api        FastAPI /score (Dockerized)    → PD + decision + reasons
-               └─ agent  Claude tool-use loop           → plain-language explanations
-```
 
 ## Why this project is built the way it is
 
