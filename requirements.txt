@@ -13,3 +13,10 @@ python-dotenv>=1.0
 joblib>=1.4
 httpx>=0.27
 duckdb>=1.0
+
+# MCP server. v2 of the SDK targets spec revision 2026-07-28 (stateless core);
+# the v1 line does not. Pin the major version — v1 and v2 share the package name.
+mcp>=2,<3
+
+# Tests
+pytest>=8.0
