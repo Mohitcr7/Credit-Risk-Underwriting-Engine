@@ -1,4 +1,4 @@
-<svg viewBox="0 0 1320 1024" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Credit Risk Underwriting Engine architecture: raw loan tape to bronze Delta, through a Unity Catalog leakage firewall that blocks post-origination columns, into LightGBM training with out-of-time validation, isotonic calibration, expected-value pricing and SHAP explainability, then MLflow pyfunc packaging, Databricks Model Serving, Lakehouse drift monitoring and a guarded text2sql agent.">
+<svg viewBox="0 0 1320 1268" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Credit Risk Underwriting Engine architecture: raw loan tape to bronze Delta, through a Unity Catalog leakage firewall that blocks post-origination columns, into LightGBM training with out-of-time validation, isotonic calibration, expected-value pricing and SHAP explainability, then MLflow pyfunc packaging, Databricks Model Serving, Lakehouse drift monitoring, a guarded text2sql agent, and an MCP server exposing scoring, ECOA reason codes and guarded SQL as tools, resources and prompts.">
   <defs>
     <style>
       .t-title { font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 24px; font-weight: 800; }
@@ -55,11 +55,12 @@
     <path id="pServe"     d="M 1144,634 C 1144,654 229,660 229,680"/>
     <path id="pToObserve" d="M 434,828 L 452,828"/>
     <path id="pToAgent"   d="M 864,828 L 882,828"/>
+    <path id="pMcp"       d="M 1090,970 C 1090,992 229,998 229,1022"/>
   </defs>
 
-  <rect width="1320" height="1024" fill="#080d14"/>
-  <rect width="1320" height="1024" fill="url(#grid)"/>
-  <rect width="1320" height="1024" fill="url(#ambient)"/>
+  <rect width="1320" height="1268" fill="#080d14"/>
+  <rect width="1320" height="1268" fill="url(#grid)"/>
+  <rect width="1320" height="1268" fill="url(#ambient)"/>
 
   <!-- ══════════ masthead ══════════ -->
   <text class="t-title" x="32" y="48" fill="url(#brand)">Credit Risk Underwriting Engine</text>
@@ -406,5 +407,83 @@
     <text class="t-lbl mut" x="34" y="269">row cap · 11/11 injection + DDL attacks blocked</text>
   </g>
 
-  <text class="t-foot dim" x="660" y="1002" text-anchor="middle">PROVE THE FIREWALL · JUDGE ON FUTURE VINTAGES · PRICE THE DECISION · EXPLAIN EVERY DECLINE</text>
+
+  <!-- band C → band D -->
+  <use href="#pMcp" stroke="#7fb3d9" stroke-width="1.3" stroke-opacity="0.32" stroke-dasharray="3 4" fill="none"/>
+  <polygon points="224,1016 234,1016 229,1024" fill="#7fb3d9" opacity="0.65"/>
+  <g class="motion" fill="#7fb3d9">
+    <circle r="3.2"><animateMotion dur="3s" repeatCount="indefinite" begin="0s"><mpath href="#pMcp"/></animateMotion></circle>
+    <circle r="3.2"><animateMotion dur="3s" repeatCount="indefinite" begin="1.5s"><mpath href="#pMcp"/></animateMotion></circle>
+  </g>
+
+  <!-- ══════════ BAND D · INTEGRATE ══════════ -->
+  <text class="t-eye gold" x="32" y="1004">INTEGRATE · MCP SERVER</text>
+
+  <!-- MCP SERVER -->
+  <g transform="translate(24, 1022)">
+    <rect width="410" height="186" rx="13" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-card mut" x="20" y="30">MCP SERVER</text>
+    <line x1="20" y1="42" x2="390" y2="42" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-hb fg" x="20" y="68">Model Context Protocol</text>
+    <text class="t-lbl dim" x="20" y="86">one contract — Claude Code, Claude Desktop or any</text>
+    <text class="t-lbl dim" x="20" y="100">MCP client underwrites against the same engine</text>
+
+    <rect x="20" y="112" width="180" height="26" rx="6" fill="#f0b429" fill-opacity="0.15" stroke="#f0b429" stroke-opacity="0.45"/>
+    <text class="t-lbl gold" x="30" y="129">spec 2026-07-28</text>
+    <rect x="206" y="112" width="184" height="26" rx="6" fill="#7fb3d9" fill-opacity="0.14" stroke="#7fb3d9" stroke-opacity="0.38"/>
+    <text class="t-lbl stl" x="216" y="129">Python SDK v2 · stdio</text>
+
+    <text class="t-lbl dim" x="20" y="158">the stateless revision — no initialize handshake and</text>
+    <text class="t-lbl dim" x="20" y="172">no session id; Roots/Sampling/Logging deprecated, unused</text>
+  </g>
+
+  <!-- PRIMITIVES -->
+  <g transform="translate(454, 1022)">
+    <rect width="410" height="186" rx="13" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-card mut" x="20" y="30">PRIMITIVES</text>
+    <line x1="20" y1="42" x2="390" y2="42" stroke="#ffffff" stroke-opacity="0.08"/>
+
+    <text class="t-lbl gold" x="20" y="62">TOOLS · 3</text>
+    <rect x="20" y="70" width="180" height="22" rx="6" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.10"/>
+    <text class="t-mono fg" x="30" y="85">score_applicant</text>
+    <rect x="20" y="96" width="180" height="22" rx="6" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.10"/>
+    <text class="t-mono fg" x="30" y="111">explain_decision</text>
+    <rect x="20" y="122" width="180" height="22" rx="6" fill="#10b981" fill-opacity="0.07" stroke="#10b981" stroke-opacity="0.35"/>
+    <text class="t-mono fg" x="30" y="137">query_loans</text>
+    <text class="t-lbl grn" x="192" y="137" text-anchor="end">guarded</text>
+
+    <text class="t-lbl gold" x="214" y="62">RESOURCES · 3</text>
+    <text class="t-mono stl" x="214" y="80">creditrisk://schema/</text>
+    <text class="t-lbl mut" x="224" y="94">origination-firewall</text>
+    <text class="t-lbl mut" x="224" y="108">unity-catalog</text>
+    <text class="t-lbl mut" x="224" y="122">loan-book</text>
+    <text class="t-lbl gold" x="214" y="142">PROMPT · 1</text>
+    <text class="t-mono fg" x="214" y="158">adverse_action_notice</text>
+
+    <text class="t-lbl dim" x="20" y="176">reference material sits behind resource URIs — tools/list stays small</text>
+  </g>
+
+  <!-- SAME BOUNDARY -->
+  <g transform="translate(884, 1022)">
+    <rect width="412" height="186" rx="13" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-card mut" x="20" y="30">SAME BOUNDARY</text>
+    <line x1="20" y1="42" x2="392" y2="42" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text class="t-hb fg" x="20" y="68">A thin layer, not a second engine</text>
+    <text class="t-lbl dim" x="20" y="86">an MCP client and the HTTP API cannot disagree —</text>
+    <text class="t-lbl dim" x="20" y="100">the guardrail is called, never re-implemented</text>
+
+    <rect x="20" y="110" width="372" height="24" rx="7" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.10"/>
+    <circle cx="34" cy="122" r="3.5" fill="#7fb3d9"/>
+    <text class="t-mono fg" x="48" y="126">api.main.score()</text>
+    <text class="t-lbl dim" x="380" y="126" text-anchor="end">one scoring path</text>
+
+    <rect x="20" y="140" width="372" height="24" rx="7" fill="#10b981" fill-opacity="0.07" stroke="#10b981" stroke-opacity="0.35"/>
+    <circle cx="34" cy="152" r="3.5" fill="#10b981"/>
+    <text class="t-mono fg" x="48" y="156">validate_sql()</text>
+    <text class="t-lbl grn" x="380" y="156" text-anchor="end">18/18 write + DDL refused</text>
+
+    <text class="t-lbl dim" x="20" y="180">the tool schema IS the Applicant model — the firewall is inherited</text>
+  </g>
+
+  <text class="t-foot dim" x="660" y="1244" text-anchor="middle">PROVE THE FIREWALL · JUDGE ON FUTURE VINTAGES · PRICE THE DECISION · EXPLAIN EVERY DECLINE · GUARD EVERY QUERY</text>
 </svg>

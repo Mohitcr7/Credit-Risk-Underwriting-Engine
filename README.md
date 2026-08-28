@@ -1,4 +1,4 @@
-![Credit Risk Underwriting Engine — architecture: raw loan tape into bronze Delta, through a Unity Catalog leakage firewall that blocks post-origination columns, into LightGBM training with out-of-time validation, isotonic calibration, expected-value pricing and SHAP explainability, then MLflow pyfunc packaging, Databricks Model Serving, Lakehouse drift monitoring and a guarded text2sql agent.](docs/architecture.svg)
+![Credit Risk Underwriting Engine — architecture: raw loan tape into bronze Delta, through a Unity Catalog leakage firewall that blocks post-origination columns, into LightGBM training with out-of-time validation, isotonic calibration, expected-value pricing and SHAP explainability, then MLflow pyfunc packaging, Databricks Model Serving, Lakehouse drift monitoring, a guarded text2sql agent, and an MCP server exposing scoring, ECOA reason codes and guarded SQL as tools, resources and prompts.](docs/architecture.svg)
 
 # Credit Risk Engine — PD Model, Profit-Optimal Policy & AI Decision Explainer
 
